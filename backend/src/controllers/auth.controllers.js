@@ -1,4 +1,5 @@
 import userModel from "../models/user.model.js";
+import foodPartnerModel from "../models/foodpartner.model.js";
 import bcrypt from "bcrypt"
 import { response } from "express";
 import jwt from 'jsonwebtoken'
@@ -77,11 +78,96 @@ const loginUser = async (req, res) => {
     })
 }
 
-const logoutUser = async (req,res) => {
+const logoutUser = async (req, res) => {
     res.clearCookie("token")
     res.status(200).json({
-        message:"user logedout successfully"
+        message: "user logedout successfully"
     })
 }
 
-export default { registerUser, loginUser ,logoutUser}
+const registeFoodPartner = async (req, res) => {
+    const { fullName, email, password } = req.body
+
+    const isFoodPartnerAlreadyExist = await foodPartnerModel.findOne({
+        email
+    })
+
+    if (isFoodPartnerAlreadyExist) {
+        return res.status(400).json({
+            message: "food partner account already exists"
+        })
+    }
+    const hashedPassword = await bcrypt.hash(password, 10)
+
+    const foodPartner = await foodPartnerModel.create({
+        fullName,
+        email,
+        password: hashedPassword
+    })
+
+    const token = jwt.sign({
+        id: foodPartner._id
+    }, process.env.JWT_SECRET)
+
+    res.cookie("token", token)
+
+    res.status(201).json({
+        message: "food partner registered succesfully",
+        user: {
+            _id: foodPartner._id,
+            email: foodPartner.email,
+            fullName: foodPartner.fullName
+        }
+    })
+}
+
+const loginFoodPartner = async (req, res) => {
+    const { email, password } = req.body
+
+    const foodPartner = await foodPartnerModel.findOne({ email })
+
+    if (!foodPartner) {
+        return res.status(400).json({
+            message: "invalid email"
+        })
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, foodPartner.password)
+
+    if (!isPasswordValid) {
+        return res.status(400).json({
+            message: "invalid password"
+        })
+    }
+
+    const token = jwt.sign({
+        id: foodPartner._id
+    }, process.env.JWT_SECRET)
+
+    res.cookie("token", token)
+
+    res.status(201).json({
+        message: "food partner logged in succesfully",
+        user: {
+            _id: foodPartner._id,
+            email: foodPartner.email,
+            fullName: foodPartner.fullName
+        }
+    })
+}
+
+const logoutFoodPartner = async (req, res) => {
+    res.clearCookie("token")
+    res.status(200).json({
+        message: "food partner logedout successfully"
+    })
+}
+
+export default {
+    registerUser,
+    loginUser,
+    logoutUser,
+    registeFoodPartner,
+    loginFoodPartner,
+    logoutFoodPartner
+}
