@@ -1,4 +1,5 @@
 import foodPartnerModel from '../models/foodpartner.model.js'
+import userModel from "../models/user.model.js"
 import jwt from 'jsonwebtoken'
 
 
@@ -23,7 +24,7 @@ async function authFoodPartnerMiddleware(req,res,next) {
         // console.log("Calling next()");
         next()
     } catch (error) {
-        console.error("JWT error:", error);
+        // console.error("JWT error:", error);
         return res.status(401).json({
             message: "Inavalid Token"
         })
@@ -31,4 +32,31 @@ async function authFoodPartnerMiddleware(req,res,next) {
     
 }
 
-export default {authFoodPartnerMiddleware}
+async function authUserMiddleware(req,res,next) {
+    
+    const token = req.cookies.token
+
+    if(!token){
+       
+        res.send(401).json({
+            message:"Please login first"
+        })
+    }
+
+    try {
+        const decoded = jwt.verify(token,process.env.JWT_SECRET)
+        
+        const user = await userModel.findById(decoded.id)
+        
+        req.user = user
+        
+        next()
+    } catch (error) {
+        
+        return res.send(401).json({
+            message:"Invalid tokken"
+        })
+    }
+}
+
+export default {authFoodPartnerMiddleware,authUserMiddleware}

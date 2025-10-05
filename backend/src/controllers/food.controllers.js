@@ -26,7 +26,7 @@ async function createFood(req, res) {
       foodPartner: req.foodPartner._id
    })
 
-   console.log("foodItem created");
+   // console.log("foodItem created");
    
 
     return res.status(201).json({
@@ -39,6 +39,15 @@ async function createFood(req, res) {
   }
 }
 
+async function getFoodItems(req,res) {
+   console.log('creating food item');
+   
+   const foodItems = await foodModel.find({})
+   console.log('created food item');
+   res.status(200).json({
+        message: "Food items fetched successfully",
+        foodItems
+    })
+}
 
-
-export default { createFood }
+export default { createFood,getFoodItems }
