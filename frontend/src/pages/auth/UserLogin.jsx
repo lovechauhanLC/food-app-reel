@@ -11,7 +11,7 @@ const UserLogin = () => {
         const email = e.target.email.value
         const password = e.target.password.value
 
-        const response = await axios.post("http://localhost:3000/api/auth/foodpartner/login",{
+        const response = await axios.post("http://localhost:3000/api/auth/user/login",{
             email:email,
             password :password
         },{
@@ -27,8 +27,10 @@ const UserLogin = () => {
   return (
     <div>
       <div>
-        <header>Welcome Back</header>
-        <p>Sign in to continue your food journey.</p>
+        <header>
+          <h1>Welcome Back</h1>
+          <p>Sign in to continue your food journey.</p>
+        </header>
 
         <form onSubmit={handleSubmit}>
           <div>

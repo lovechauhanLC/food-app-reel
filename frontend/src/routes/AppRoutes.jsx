@@ -4,6 +4,7 @@ import UserRegister from '../pages/auth/UserRegister'
 import UserLogin from '../pages/auth/UserLogin'
 import FoodPartnerResgister from '../pages/auth/FoodPartnerResgister'
 import FoodPartnerLogin from '../pages/auth/FoodPartnerLogin'
+import ChooseRegister from '../pages/auth/ChooseRegister'
 
 const AppRoutes = () => {
   return (
@@ -11,7 +12,7 @@ const AppRoutes = () => {
         <Router>
             <Routes>
 
-                <Route path='/register' element={<h1>Register</h1>} />
+                <Route path='/register' element={<ChooseRegister/>} />
                 <Route path='/user/register' element={<UserRegister/>} />
                 <Route path='/user/login' element={<UserLogin/>} />
                 <Route path='/food-partner/register' element={<FoodPartnerResgister/>} />
