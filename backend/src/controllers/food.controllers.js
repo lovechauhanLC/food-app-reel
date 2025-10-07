@@ -1,4 +1,6 @@
 import foodModel from '../models/food.models.js'
+import likesModel from '../models/likes.model.js'
+import saveModel from '../models/save.model.js'
 import storageService from '../services/storage.services.js'
 import { v4 as uuid } from 'uuid';
 
@@ -40,14 +42,105 @@ async function createFood(req, res) {
 }
 
 async function getFoodItems(req,res) {
-   console.log('creating food item');
+  //  console.log('creating food item');
    
    const foodItems = await foodModel.find({})
-   console.log('created food item');
+  //  console.log('created food item');
    res.status(200).json({
         message: "Food items fetched successfully",
         foodItems
     })
 }
 
-export default { createFood,getFoodItems }
+async function likeFood(req,res) {
+  const {foodId} = req.body
+  const user = req.user
+
+  const isAlreadyLiked = await likesModel.findOne({
+    user: user._id,
+    food: foodId
+  })
+
+  if(isAlreadyLiked){
+    await likesModel.deleteOne({
+      user: user._id,
+      food: foodId
+    })
+
+    await likesModel.findByIdAndUpdate(foodId,{
+      $inc: {likeCount: -1}
+    })
+
+    return res.status(201).json({
+      message:"Food unliked succesfully"
+    })
+  }
+
+  const like = await likesModel.create({
+    user: user._id,
+    food: foodId
+  })
+
+  await likesModel.findByIdAndUpdate(foodId,{
+    $inc: {likeCount: 1}
+  })
+
+  return res.status(201).json({
+      message:"Food liked succesfully",
+      like
+    })
+}
+
+async function saveFood(req,res) {
+  const {foodId} = req.body
+  const user = req.user
+
+  const isAlreadySaved = await saveModel.findOne({
+    user: user._id,
+    food: foodId
+  })
+
+  if(isAlreadySaved){
+    await saveModel.deleteOne({
+      user: user._id,
+      food: foodId
+    })
+
+    await saveModel.findByIdAndUpdate(foodId,{
+      $inc: {saveCount: -1}
+    })
+
+    return res.status(201).json({
+      message:"Food unsaved succesfully"
+    })
+  }
+
+  const save = await saveModel.create({
+    user: user._id,
+    food: foodId
+  })
+
+  await saveModel.findByIdAndUpdate(foodId,{
+    $inc: {saveCount: 1}
+  })
+
+  return res.status(201).json({
+      message:"Food saved succesfully",
+      save
+    })
+}
+
+async function getSaveFood(req,res) {
+  const user = req.user
+  const savedFood = await saveModel.findOne({user: user._id}).populate('food')
+
+  if(!saveFood || saveFood.length === 0){
+    return res.status(404).json({ message: "No saved foods found" });
+  }
+
+  res.status(200).json({
+        message: "Saved foods retrieved successfully",
+        savedFoods
+    });
+}
+export default { createFood,getFoodItems, likeFood, saveFood, getSaveFood}
