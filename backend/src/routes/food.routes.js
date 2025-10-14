@@ -30,7 +30,7 @@ router.post('/save',
     foodController.saveFood
 )
 
-router.get('/like',
+router.get('/save',
     authMiddleware.authUserMiddleware,
     foodController.getSaveFood
 )

@@ -3,18 +3,18 @@ import mongoose from "mongoose";
 const likesSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
-    ref: 'user',
-    required: true
+        ref: 'user',
+        required: true
     },
-    food:{
+    food: {
         type: mongoose.Schema.Types.ObjectId,
-    ref: 'user',
-    required: true
+        ref: 'food',
+        required: true
     }
-},{
-    timestamps:true
+}, {
+    timestamps: true
 })
 
-const likesModel = mongoose.model('likes',likesSchema)
+const likesModel = mongoose.model('likes', likesSchema)
 
 export default likesModel

@@ -35,9 +35,9 @@ async function authFoodPartnerMiddleware(req,res,next) {
 async function authUserMiddleware(req,res,next) {
     
     const token = req.cookies.token
-
+    
     if(!token){
-       
+        
         return res.send(401).json({
             message:"Please login first"
         })
@@ -45,6 +45,7 @@ async function authUserMiddleware(req,res,next) {
 
     try {
         const decoded = jwt.verify(token,process.env.JWT_SECRET)
+        
         
         const user = await userModel.findById(decoded.id)
         

@@ -76,7 +76,7 @@ const ReelFeed = ({ items = [], onLike, onSave, emptyMessage = 'No videos yet.' 
                   <path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z" />
                 </svg>
               </button>
-              <span className="text-white text-sm mt-1">{item.savesCount ?? item.bookmarks ?? item.saves ?? 0}</span>
+              <span className="text-white text-sm mt-1">{item.saveCount ?? item.bookmarks ?? item.saves ?? 0}</span>
             </div>
 
             {/* Comments */}

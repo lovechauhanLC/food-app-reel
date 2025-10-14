@@ -117,7 +117,7 @@ async function getSaveFood(req, res) {
   const user = req.user
   const savedFood = await saveModel.find({ user: user._id }).populate('food')
 
-  if (!saveFood || saveFood.length === 0) {
+  if (!savedFood || savedFood.length === 0) {
     return res.status(404).json({ message: "No saved foods found" });
   }
 

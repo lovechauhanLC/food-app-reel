@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
+import ReelFeed from "../../components/ReelFeed";
 
 const Saved = () => {
   const [videos, setvideos] = useState([]);
@@ -15,12 +16,12 @@ const Saved = () => {
           video: item.food.video,
           description: item.food.description,
           likeCount: item.food.likeCount,
-          savesCount: item.food.savesCount,
+          saveCount: item.food.saveCount,
           commentsCount: item.food.commentsCount,
           foodPartner: item.food.foodPartner,
         }));
+        setvideos(savedFoods);
       });
-    setvideos(savedFoods);
   }, []);
 
   async function removeSaved(item) {
@@ -37,7 +38,7 @@ const Saved = () => {
       setvideos((prev) =>
         prev.map((v) =>
           v._id === item._id
-            ? { ...v, savesCount: Math.max(0, (v.savesCount ?? 1) - 1) }
+            ? { ...v, saveCount: Math.max(0, (v.saveCount ?? 1) - 1) }
             : v
         )
       );
@@ -47,7 +48,7 @@ const Saved = () => {
   }
 
   return (
-    <div items={videos} onSave={removeSaved} emptyMessage="No saved videos" />
+    <ReelFeed items={videos} onSave={removeSaved} emptyMessage="No saved videos" />
   );
 };
 
