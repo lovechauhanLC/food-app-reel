@@ -1,5 +1,6 @@
 import axios from 'axios'
 import React, { useState,useEffect } from 'react'
+import ReelFeed from '../../components/ReelFeed'
 
 
 const Home = () => {
@@ -49,7 +50,7 @@ const Home = () => {
     }
 
   return (
-    <div
+    <ReelFeed
         items={videos}
         onLike={likeVideos}
         onSave={saveVideo}

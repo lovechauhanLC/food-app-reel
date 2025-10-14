@@ -38,7 +38,7 @@ async function authUserMiddleware(req,res,next) {
 
     if(!token){
        
-        res.send(401).json({
+        return res.send(401).json({
             message:"Please login first"
         })
     }

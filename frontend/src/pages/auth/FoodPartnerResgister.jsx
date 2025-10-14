@@ -1,29 +1,30 @@
 import React from "react";
+import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 
-const FoodPartnerResgister = () => {
+const FoodPartnerRegister = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    e.preventDefalut();
+    e.preventDefault();
 
-    const businessName = e.target.businessName.value;
+    const fullName = e.target.fullName.value;
     const contactName = e.target.contactName.value;
     const phone = e.target.phone.value;
     const email = e.target.email.value;
     const password = e.target.password.value;
     const address = e.target.address.value;
 
-    const response = await axios
+    await axios
       .post(
         "http://localhost:3000/api/auth/foodpartner/register",
         {
-          name: businessName,
-          contactName,
-          phone,
-          address,
-          email,
-          password,
+          fullName: fullName, 
+          contactName: contactName,
+          phone: phone,
+          address: address,
+          email: email,
+          password: password,
         },
         {
           withCredentials: true,
@@ -39,76 +40,137 @@ const FoodPartnerResgister = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-radial-[at_50%_75%] from-sky-200 via-blue-400 to-indigo-900 to-90% px-4">
-      <div className="w-full max-w-sm bg-white shadow-md rounded-lg p-3">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-sky-100 via-blue-200 to-indigo-300 px-4 py-8">
+      <div className="w-full max-w-md bg-white shadow-lg rounded-lg p-6 sm:p-8">
         <header className="text-center mb-6">
-          <h1 className="text-3xl font-semibold text-gray-800 ">
+          <h1 className="text-2xl sm:text-3xl font-semibold text-gray-800">
             Partner sign up
           </h1>
-          <p className="text-gray-500 text-sm mt-1 ">
+          <p className="text-gray-600 text-sm sm:text-base mt-1">
             Grow your business with our platform.
           </p>
         </header>
-        <nav className=" mb-6 text-xl text-gray-600 ">
-          <strong className="font-medium text-gray-700 mr-3">Switch: </strong> •{" "}
+        <nav className="mb-6 text-lg sm:text-xl text-gray-600 text-center">
+          <strong className="font-medium text-gray-700 mr-3">Switch:</strong> •{" "}
           <Link
             to="/user/register"
-            className="text-blue-600 font-medium text-xl hover:underline mr-3"
+            className="text-blue-600 font-medium hover:underline mr-3"
           >
             User
           </Link>{" "}
           •{" "}
           <Link
             to="/food-partner/register"
-            className="text-blue-600 font-medium text-xlhover:underline"
+            className="text-blue-600 font-medium hover:underline"
           >
             Food Partner
           </Link>
         </nav>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div className="flex flex-col gap-1">
-            <label htmlFor="businessName" className="block text-[16px] font-medium text-gray-700">Business Name</label>
+            <label
+              htmlFor="fullName"
+              className="block text-base font-medium text-gray-700"
+            >
+              Business Name
+            </label>
             <input
-              id="businessName"
-              name="businessName"
+              id="fullName"
+              name="fullName"
               placeholder="Tasty Bites"
-              className="w-full border text-[16px]border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none "
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
           </div>
           <div className="flex flex-col gap-1">
-            <label htmlFor="contactName" className="block text-[16px] font-medium text-gray-700">Contact Name</label>
-            <input id="contactName" name="contactName" placeholder="John Doe" className="w-full border text-[16px]border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none "/>
+            <label
+              htmlFor="contactName"
+              className="block text-base font-medium text-gray-700"
+            >
+              Contact Name
+            </label>
+            <input
+              id="contactName"
+              name="contactName"
+              placeholder="John Doe"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            />
           </div>
           <div className="flex flex-col gap-1">
-            <label htmlFor="phone" className="block text-[16px] font-medium text-gray-700 ">Phone</label>
-            <input id="phone" name="phone" placeholder="+91 1234567890" className="w-full border text-[16px]border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none "/>
+            <label
+              htmlFor="phone"
+              className="block text-base font-medium text-gray-700"
+            >
+              Phone
+            </label>
+            <input
+              id="phone"
+              name="phone"
+              placeholder="+91 1234567890"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            />
           </div>
           <div className="flex flex-col gap-1">
-            <label htmlFor="email" className="block text-[16px] font-medium text-gray-700 ">Email</label>
-            <input id="email" name="email" placeholder="you@example.com" className="w-full border text-[16px]border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none "/>
+            <label
+              htmlFor="email"
+              className="block text-base font-medium text-gray-700"
+            >
+              Email
+            </label>
+            <input
+              id="email"
+              name="email"
+              placeholder="you@example.com"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            />
           </div>
           <div className="flex flex-col gap-1">
-            <label htmlFor="password" className="block text-[16px] font-medium text-gray-700 ">Password</label>
-            <input id="password" name="password" placeholder="••••••••" className="w-full border text-[16px]border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none "/>
+            <label
+              htmlFor="password"
+              className="block text-base font-medium text-gray-700"
+            >
+              Password
+            </label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              placeholder="••••••••"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            />
           </div>
           <div className="flex flex-col gap-1">
-            <label htmlFor="address" className="block text-[16px] font-medium text-gray-700 ">Address</label>
+            <label
+              htmlFor="address"
+              className="block text-base font-medium text-gray-700"
+            >
+              Address
+            </label>
             <input
               id="address"
               name="address"
               placeholder="123 Market Street"
-              className="w-full border text-[16px]border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none "
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
-            <p className="text-sm">*Full address helps customers find you faster.</p>
+            <p className="text-sm text-gray-500 mt-1">
+              *Full address helps customers find you faster.
+            </p>
           </div>
-          <button className="w-full bg-blue-500 hover:bg-blue-800 text-xl text-white font-medium py-2 rounded-lg transition">Sign Up</button>
+          <button className="w-full bg-blue-600 hover:bg-blue-800 text-white text-lg font-semibold py-3 rounded-lg transition duration-300">
+            Sign Up
+          </button>
         </form>
-        <div className="text-sm text-center text-gray-600 mt-4">
-          Already a partner? <Link to="/food-partner/login" className="text-blue-600 font-medium hover:underline">Sign in</Link>
+        <div className="text-sm text-center text-gray-600 mt-5">
+          Already a partner?{" "}
+          <Link
+            to="/food-partner/login"
+            className="text-blue-600 font-medium hover:underline"
+          >
+            Sign in
+          </Link>
         </div>
       </div>
     </div>
   );
 };
 
-export default FoodPartnerResgister;
+export default FoodPartnerRegister;
