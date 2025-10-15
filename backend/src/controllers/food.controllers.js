@@ -27,8 +27,10 @@ async function createFood(req, res) {
 }
 
 async function getFoodItems(req, res) {
-
+  const userId = req.user?._id
   const foodItems = await foodModel.find({})
+
+
   res.status(200).json({
     message: "Food items fetched successfully",
     foodItems
@@ -72,6 +74,27 @@ async function likeFood(req, res) {
     message: "Food liked succesfully",
     like
   })
+}
+
+async function getLikedFood(req, res) {
+  try {
+    const user = req.user;
+    const likedFood = await likesModel.find({ user: user._id }).populate('food');
+
+    if (!likedFood || likedFood.length === 0) {
+      return res.status(200).json({ likedVideos: [] });
+    }
+ 
+    const likedVideos = likedFood.map((item) => item.food._id);
+
+    res.status(200).json({
+      message: "Liked foods retrieved successfully",
+      likedVideos
+    });
+  } catch (error) {
+    console.error("Error in getLikedFood:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
 }
 
 async function saveFood(req, res) {
@@ -126,4 +149,4 @@ async function getSaveFood(req, res) {
     savedFood
   });
 }
-export default { createFood, getFoodItems, likeFood, saveFood, getSaveFood }
+export default { createFood, getFoodItems, likeFood, getLikedFood, saveFood, getSaveFood }

@@ -25,6 +25,11 @@ router.post('/like',
     foodController.likeFood
 )
 
+router.get('/like',
+    authMiddleware.authUserMiddleware,
+    foodController.getLikedFood
+)
+
 router.post('/save',
     authMiddleware.authUserMiddleware,
     foodController.saveFood

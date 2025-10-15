@@ -6,9 +6,10 @@ const ReelFeed = ({
   onLike,
   onSave,
   onAddToCart,
+  likedVideos,
+  savedVideos,
   emptyMessage = "No videos yet.",
 }) => {
-
   const videoRefs = useRef(new Map());
 
   useEffect(() => {
@@ -38,6 +39,70 @@ const ReelFeed = ({
     }
     videoRefs.current.set(id, el);
   };
+
+  const heartIcons = [
+    // liked (filled)
+    <svg
+      key="filled-heart"
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      fill="red"
+      stroke="red"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 22l7.8-8.6 1-1a5.5 5.5 0 0 0 0-7.8z" />
+    </svg>,
+
+    // unliked (empty)
+    <svg
+      key="empty-heart"
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 22l7.8-8.6 1-1a5.5 5.5 0 0 0 0-7.8z" />
+    </svg>,
+  ];
+
+  const bookmarkIcons = [
+    // saved (filled)
+    <svg
+      key="filled-bookmark"
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      fill="white"
+      stroke="white"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z" />
+    </svg>,
+
+    // unsaved (empty)
+    <svg
+      key="empty-bookmark"
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z" />
+    </svg>,
+  ];
 
   return (
     <div className="w-full h-screen bg-black">
@@ -72,18 +137,9 @@ const ReelFeed = ({
                 className="p-3 rounded-full bg-white/20 hover:bg-white/30"
                 aria-label="Like"
               >
-                <svg
-                  width="28"
-                  height="28"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 22l7.8-8.6 1-1a5.5 5.5 0 0 0 0-7.8z" />
-                </svg>
+                {Array.isArray(likedVideos) && likedVideos.includes(item._id)
+                  ? heartIcons[0]
+                  : heartIcons[1]}
               </button>
               <span className="text-white text-sm mt-1">
                 {item.likeCount ?? item.likesCount ?? item.likes ?? 0}
@@ -97,18 +153,9 @@ const ReelFeed = ({
                 className="p-3 rounded-full bg-white/20 hover:bg-white/30"
                 aria-label="Bookmark"
               >
-                <svg
-                  width="28"
-                  height="28"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z" />
-                </svg>
+                {Array.isArray(savedVideos) && savedVideos.includes(item._id)
+                  ? bookmarkIcons[0]
+                  : bookmarkIcons[1]}
               </button>
               <span className="text-white text-sm mt-1">
                 {item.saveCount ?? item.bookmarks ?? item.saves ?? 0}
