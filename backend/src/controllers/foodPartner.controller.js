@@ -1,11 +1,11 @@
-import foodPartnerModel from "../models/foodpartner.model";
-import foodModel from "../models/food.models"
+import foodPartnerModel from "../models/foodpartner.model.js";
+import foodModel from "../models/food.models.js"
 
 async function getFoodPartnerId(req,res) {
     const foodPartnerId = req.params.id
 
     const foodPartner = await foodPartnerModel.findById(foodPartnerId)
-    const foodItemsByFoodPartner = await foodPartnerModel.find({foodPartner: foodPartnerId})
+    const foodItemsByFoodPartner = await foodModel.find({foodPartner: foodPartnerId})
 
     if(!foodPartner){
         return res.status(404).json({

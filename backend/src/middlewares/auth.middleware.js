@@ -53,7 +53,7 @@ async function authUserMiddleware(req,res,next) {
         
         next()
     } catch (error) {
-        
+        console.error("JWT error:", error);
         return res.send(401).json({
             message:"Invalid tokken"
         })

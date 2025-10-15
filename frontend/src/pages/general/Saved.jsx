@@ -6,14 +6,16 @@ const Saved = () => {
   const [videos, setvideos] = useState([]);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3000/api/food/save", {
-        withCredentials: true,
-      })
-      .then((response) => {
-        const savedFoods = response.data.savedFoods.map((item) => ({
+    const fetchSavedFoods = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/api/food/save", {
+          withCredentials: true,
+        });
+        console.log("response",response);
+        
+        const savedFoods = response.data.savedFood.map((item) => ({
           _id: item.food._id,
-          video: item.food.video,
+          videos: item.food.videos,
           description: item.food.description,
           likeCount: item.food.likeCount,
           saveCount: item.food.saveCount,
@@ -21,7 +23,11 @@ const Saved = () => {
           foodPartner: item.food.foodPartner,
         }));
         setvideos(savedFoods);
-      });
+      } catch (error) {
+        console.error("Error fetching saved foods:", error);
+      }
+    };
+    fetchSavedFoods();
   }, []);
 
   async function removeSaved(item) {

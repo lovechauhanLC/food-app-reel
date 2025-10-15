@@ -135,7 +135,7 @@ const CreateFood = () => {
                 width="32"
                 height="32"
                 src={videoIcon}
-                alt="Upload icon"
+                alt="Upload icon"x
                 className="mx-auto mb-2"
               />
               <div className="file-dropzone-text text-gray-700">
