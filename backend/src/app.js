@@ -3,6 +3,7 @@ import connectDB from './db/db.js'
 import cookieParser from "cookie-parser"
 import authRoutes from './routes/auth.route.js'
 import foodRoutes from './routes/food.routes.js'
+import cartRoutes from './routes/cart.route.js'
 import foodPartnerRoutes from './routes/foodPartner.route.js'
 import cors from "cors";
 
@@ -23,5 +24,6 @@ app.get('/',(req,res)=>{
 app.use('/api/auth',authRoutes)
 app.use('/api/food',foodRoutes)
 app.use('/api/food-partner', foodPartnerRoutes);
+app.use('/api/cart', cartRoutes)
 
 export default app
