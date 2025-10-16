@@ -6,23 +6,21 @@ const cartSchema = new mongoose.Schema({
         ref: 'user',
         required: true
     },
-    items:[
+    items: [
         {
-            food:{
+            food: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'food',
-                required: 1
-            }        
-        },{
+                required: true
+            },
             quantity: {
                 type: Number,
                 default: 1
             }
         }
-
     ]
 })
 
-const cartModel = mongoose.model('cart',cartSchema)
+const cartModel = mongoose.model('cart', cartSchema)
 
 export default cartModel

@@ -1,45 +1,54 @@
 import cartModel from '../models/cart.models.js'
 
-async function addToCart(req,res) {
+async function addToCart(req, res) {
     try {
-        const userId = req.body.user._id
-        const {foodId} = req.user
+        const userId = req.user._id
+        const { items } = req.body
 
-        const cart = await cartModel.findOne({user: userId})
+        if (!items || !items.length) {
+            return res.status(400).json({ save: false });
+        }
 
-        if(!cart){
-            cart  = new cartModel({user: userId, items: []}) 
+        const { food: foodId, quantity = 1 } = items[0];
+
+        let cart = await cartModel.findOne({ user: userId })
+
+        if (!cart) {
+            cart = new cartModel({ user: userId, items: [] })
         }
 
         const itemExists = cart.items.find(item => item.food.toString() === foodId)
 
-        if(itemExists) {
-            cart.items.push({food: foodId})
+        if (itemExists) {
+            itemExists.quantity += quantity;
+        } else {
+            cart.items.push({ food: foodId, quantity })
         }
 
         await cart.save()
-        res.status(200).json({message: "Item Added To Cart"})
+        res.status(200).json({ save: true });
 
     } catch (error) {
-        console.error("Error adding to cart: ",error)
-        res.status(500).json({message: "Internal Server Error" })
+        console.error("Error adding to cart: ", error)
+        res.status(500).json({ save: false });
     }
 }
 
-async function getCartItems(req,res) {
+async function getCartItems(req, res) {
     try {
-        const userId = req.body.userId
-        const cart = await cartModel.findOne({user: userId}).populate('items.food')
-        
-        if(!cart) {
-            return res.satuts(200).json({items: []})
+        const userId = req.user._id
+        const cart = await cartModel.findOne({ user: userId }).populate('items.food')
+
+        if (!cart) {
+            return res.status(200).json({ items: [] })
         }
 
-        res.status(200).json({items: cart.items})
+        const cartItemIds = cart.items.map(i => i.food._id.toString());
+        res.status(200).json({ items: cartItemIds });
     } catch (error) {
-        console.error("Error getting from cart: ",error)
-        res.status(500).json({message: "Internal Server Error" })
+        console.error("Error getting from cart: ", error)
+        res.status(500).json({ message: "Internal Server Error" })
     }
 }
 
-export default {addToCart , getCartItems}
+export default { addToCart, getCartItems }

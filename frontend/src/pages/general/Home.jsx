@@ -6,7 +6,7 @@ const Home = () => {
   const [videos, setVideos] = useState([]);
   const [likedVideos, setLikedVideos] = useState([]);
   const [savedVideos, setSavedVideos] = useState([]);
-  const [onAddToCart, setonAddToCart] = useState(false);
+  const [onAddToCart, setonAddToCart] = useState([]);
 
   useEffect(() => {
     axios
@@ -25,12 +25,14 @@ const Home = () => {
     useEffect(() => {
     const fetchLikedAndSaved = async () => {
       try {
-        const [likedRes, savedRes] = await Promise.all([
+        const [likedRes, savedRes, cartRes] = await Promise.all([
           axios.get("http://localhost:3000/api/food/like", { withCredentials: true }),
           axios.get("http://localhost:3000/api/food/save", { withCredentials: true }),
+          axios.get("http://localhost:3000/api/cart", { withCredentials: true }),
         ]);
 
         setLikedVideos(likedRes.data.likedVideos || []);
+        setonAddToCart(cartRes.data.items);
 
         const savedIds = savedRes.data.savedFood?.map(item => item.food._id) || [];
         setSavedVideos(savedIds);
@@ -41,6 +43,8 @@ const Home = () => {
 
     fetchLikedAndSaved();
   }, []);
+
+
 
   async function likeVideos(item) {
     const response = await axios.post(
@@ -99,6 +103,31 @@ const Home = () => {
         )
       );
       setSavedVideos((prev) => prev.filter((id) => id !== item._id));
+    }
+  }
+
+  async function addToCart(item) {
+    const response = await axios.post(
+      "http://localhost:3000/api/cart",
+      {
+        items: [
+          {
+            food: item._id,
+            quantity:1
+          }
+        ]
+      },
+      {
+        withCredentials: true,
+      }
+    );
+    console.log("response", response)
+
+    if (response.data.save) {
+      console.log("food added to cart");
+      setonAddToCart((prev) => [...prev, item._id]);
+    } else {
+      setonAddToCart((prev) => prev.filter((id) => id !== item._id));
     }
   }
 

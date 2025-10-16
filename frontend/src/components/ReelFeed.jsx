@@ -104,6 +104,42 @@ const ReelFeed = ({
     </svg>,
   ];
 
+  const cartIcons = [
+  // added to cart (filled)
+  <svg
+    key="filled-cart"
+    width="28"
+    height="28"
+    viewBox="0 0 24 24"
+    fill="yellow"
+    stroke="yellow"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M6 6h15l-1.5 9h-13z" />
+    <circle cx="9" cy="21" r="1" />
+    <circle cx="19" cy="21" r="1" />
+  </svg>,
+
+  // not added (empty)
+  <svg
+    key="empty-cart"
+    width="28"
+    height="28"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M6 6h15l-1.5 9h-13z" />
+    <circle cx="9" cy="21" r="1" />
+    <circle cx="19" cy="21" r="1" />
+  </svg>,
+];
+
   return (
     <div className="w-full h-screen bg-black">
       {items.length === 0 && (
@@ -169,20 +205,9 @@ const ReelFeed = ({
                 className="p-3 rounded-full bg-white/20 hover:bg-white/30"
                 aria-label="Add to cart"
               >
-                <svg
-                  width="28"
-                  height="28"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M6 6h15l-1.5 9h-13z" />
-                  <circle cx="9" cy="21" r="1" />
-                  <circle cx="19" cy="21" r="1" />
-                </svg>
+                {Array.isArray(onAddToCart) && onAddToCart.includes(item._id)
+                  ? cartIcons[0]
+                  : cartIcons[1]}
               </button>
               <span className="text-white text-sm mt-1">Add to cart</span>
             </div>

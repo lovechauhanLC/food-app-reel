@@ -11,7 +11,7 @@ const Saved = () => {
         const response = await axios.get("http://localhost:3000/api/food/save", {
           withCredentials: true,
         });
-        console.log("response",response);
+        
         
         const savedFoods = response.data.savedFood.map((item) => ({
           _id: item.food._id,
