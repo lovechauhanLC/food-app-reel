@@ -10,7 +10,7 @@ import Profile from '../pages/food-partner/Profile'
 import Home from '../pages/general/Home'
 import Saved from '../pages/general/Saved'
 import BottomNav from '../components/BottomNav'
-import TopNav from '../components/TopNav'
+import Cart from '../pages/general/Cart'
 
 
 const AppRoutes = () => {
@@ -24,10 +24,11 @@ const AppRoutes = () => {
                 <Route path='/user/login' element={<UserLogin/>} />
                 <Route path='/food-partner/register' element={<FoodPartnerResgister/>} />
                 <Route path='/food-partner/login' element={<FoodPartnerLogin/>} />
-                <Route path='/' element={<><TopNav/> <Home/><BottomNav/></>} />
-                <Route path='/saved' element={<><TopNav/> <Saved/><BottomNav/> </>} />
+                <Route path='/' element={<><Home/><BottomNav/></>} />
+                <Route path='/saved' element={<><Saved/><BottomNav/> </>} />
                 <Route path='/create-food' element={<CreateFood/>} />
-                <Route path='/food-partner/:id' element={<><TopNav/> <Profile/><BottomNav/> </>} />
+                <Route path='/food-partner/:id' element={<><Profile/><BottomNav/> </>} />
+                <Route path='/cart' element={<><Cart/><BottomNav/> </>} />
             </Routes>
         </Router>
     </div>
