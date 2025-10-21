@@ -2,6 +2,9 @@ import cartModel from '../models/cart.models.js'
 
 async function addToCart(req, res) {
     try {
+        if (!req.user) {
+            return res.status(401).json({ message: "Unauthorized — please login again" });
+        }
         const userId = req.user._id
         const { items } = req.body
 
@@ -36,18 +39,38 @@ async function addToCart(req, res) {
 
 async function getCartItems(req, res) {
     try {
-        const userId = req.user._id
-        const cart = await cartModel.findOne({ user: userId }).populate('items.food')
-
-        if (!cart) {
-            return res.status(200).json({ items: [] })
+        if (!req.user) {
+            return res.status(401).json({ message: "Unauthorized — please login again" });
         }
 
-        const cartItemIds = cart.items.map(i => i.food._id.toString());
-        res.status(200).json({ items: cartItemIds });
+        const userId = req.user._id;
+        const cart = await cartModel.findOne({ user: userId })
+            .populate({
+                path: 'items.food',
+                populate: {
+                    path: 'foodPartner',
+                    select: 'fullName address'
+                }
+            });
+
+        if (!cart) {
+            return res.status(200).json({ items: [] });
+        }
+
+       
+        const detailedItems = cart.items.map(i => ({
+            foodId: i.food._id,
+            foodName: i.food.name,
+            quantity: i.quantity,
+            foodPartnerName: i.food.foodPartner?.fullName || "Unknown",
+            foodPartnerAddress: i.food.foodPartner?.address || "Unknown"
+        }));
+
+        res.status(200).json({ items: detailedItems });
+
     } catch (error) {
-        console.error("Error getting from cart: ", error)
-        res.status(500).json({ message: "Internal Server Error" })
+        console.error("Error getting from cart: ", error);
+        res.status(500).json({ message: "Internal Server Error" });
     }
 }
 

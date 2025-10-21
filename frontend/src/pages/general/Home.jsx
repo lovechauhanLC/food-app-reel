@@ -6,7 +6,7 @@ const Home = () => {
   const [videos, setVideos] = useState([]);
   const [likedVideos, setLikedVideos] = useState([]);
   const [savedVideos, setSavedVideos] = useState([]);
-  const [onAddToCart, setonAddToCart] = useState([]);
+  const [cartItems, setcartItems] = useState([])
 
   useEffect(() => {
     axios
@@ -32,7 +32,7 @@ const Home = () => {
         ]);
 
         setLikedVideos(likedRes.data.likedVideos || []);
-        setonAddToCart(cartRes.data.items);
+        setcartItems(cartRes.data.items);
 
         const savedIds = savedRes.data.savedFood?.map(item => item.food._id) || [];
         setSavedVideos(savedIds);
@@ -44,6 +44,25 @@ const Home = () => {
     fetchLikedAndSaved();
   }, []);
 
+  async function addToCart(item) {
+    const response  = await axios.post("http://localhost:3000/api/cart",{
+      items: [
+        {
+          food: item._id,
+          quantity: 1
+        }
+      ]
+    },{
+      withCredentials: true
+    })
+
+    if(response.data.save){
+      console.log("food added to cart")
+      setcartItems((prev) => [...prev, item._id])
+    }else{
+      setcartItems((prev) => prev.filter((id) => id!== item._id))
+    }
+  }
 
 
   async function likeVideos(item) {
@@ -106,37 +125,14 @@ const Home = () => {
     }
   }
 
-  async function addToCart(item) {
-    const response = await axios.post(
-      "http://localhost:3000/api/cart",
-      {
-        items: [
-          {
-            food: item._id,
-            quantity:1
-          }
-        ]
-      },
-      {
-        withCredentials: true,
-      }
-    );
-    console.log("response", response)
-
-    if (response.data.save) {
-      console.log("food added to cart");
-      setonAddToCart((prev) => [...prev, item._id]);
-    } else {
-      setonAddToCart((prev) => prev.filter((id) => id !== item._id));
-    }
-  }
 
   return (
     <ReelFeed
       items={videos}
       onLike={likeVideos}
       onSave={saveVideo}
-      onAddToCart={onAddToCart}
+      onAddToCart={addToCart}
+      cartItems={cartItems}
       likedVideos={likedVideos}
       savedVideos={savedVideos}
       emptyMessage="No Videos Available"

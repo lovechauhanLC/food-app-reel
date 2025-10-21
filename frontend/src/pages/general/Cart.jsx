@@ -1,21 +1,34 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 function Cart() {
   const [cartItems, setCartItems] = useState([]);
 
-  useEffect(()=>{
+  useEffect(() => {
     const fetchCardFoods = async () => {
-        try {
-            const response = await axios.get("http://localhost:3000/api/cart",{
-                withCredentials: true
-            });
-            console.log("response", response)
-        } catch (error) {
-            console.error("Error Fetchinf cart foods: ", error)
-        }
-    }
-  })
+      try {
+        const response = await axios.get("http://localhost:3000/api/cart", {
+          withCredentials: true,
+        });
+        console.log("response", response);
+
+        const formattedItems = response.data.items.map((item) => ({
+          id: item.foodId,
+          name: item.foodName,
+          store: item.foodPartnerName,
+          address: item.foodPartnerAddress,
+          quantity: item.quantity,
+          video: item.foodVideo,
+        }));
+
+        setCartItems(formattedItems);
+      } catch (error) {
+        console.error("Error Fetchinf cart foods: ", error);
+      }
+    };
+
+    fetchCardFoods();
+  }, []);
 
   const increaseQuantity = (id) => {
     setCartItems((prev) =>
@@ -52,10 +65,11 @@ function Cart() {
               key={item.id}
               className="flex items-center bg-white rounded-lg shadow-md p-3"
             >
-              <img
-                src={item.image}
-                alt={item.name}
-                className="w-20 h-20 rounded-lg object-cover"
+              <video
+                src={item.video}
+                muted
+                loop
+                className="w-24 h-24 rounded-lg object-cover"
               />
               <div className="flex-1 ml-3">
                 <h2 className="text-lg font-semibold">{item.name}</h2>

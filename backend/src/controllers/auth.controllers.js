@@ -45,10 +45,12 @@ const registerUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
     const { email, password } = req.body
-
+    console.log(email)
     const user = await userModel.findOne({ email })
+    console.log(user)
 
     if (!user) {
+        console.log("wrong email")
         return res.status(400).json({
             message: "invalid email"
         })
@@ -57,6 +59,7 @@ const loginUser = async (req, res) => {
     const isPasswordValid = await bcrypt.compare(password, user.password)
 
     if (!isPasswordValid) {
+        console.log("invalid pass")
         return res.status(400).json({
             message: "invalid password"
         })

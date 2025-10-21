@@ -16,7 +16,7 @@ const UserLogin = () => {
             email:email,
             password :password
         },{
-            withCredentialials: true
+            withCredentials: true
         })
 
         console.log(response);

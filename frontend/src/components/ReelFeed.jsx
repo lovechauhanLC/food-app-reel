@@ -6,6 +6,7 @@ const ReelFeed = ({
   onLike,
   onSave,
   onAddToCart,
+  cartItems = [],
   likedVideos,
   savedVideos,
   emptyMessage = "No videos yet.",
@@ -205,7 +206,7 @@ const ReelFeed = ({
                 className="p-3 rounded-full bg-white/20 hover:bg-white/30"
                 aria-label="Add to cart"
               >
-                {Array.isArray(onAddToCart) && onAddToCart.includes(item._id)
+                {Array.isArray(cartItems) && cartItems.includes(item._id)
                   ? cartIcons[0]
                   : cartIcons[1]}
               </button>
